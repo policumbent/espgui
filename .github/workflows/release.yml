@@ -1,0 +1,68 @@
+name: Publish
+
+on:
+  push:
+    tags:
+      - "*"
+
+jobs:
+  publish:
+    name: Publish for ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        target:
+          - x86_64-unknown-linux-gnu
+          - x86_64-pc-windows-msvc
+          - x86_64-apple-darwin
+        include:
+          - os: ubuntu-latest
+            target: x86_64-unknown-linux-gnu
+            artifact_name: target/x86_64-unknown-linux-gnu/release/espgui
+            release_name: x86_64-unknown-linux-gnu
+            cross: false
+            strip: true
+
+          - os: macos-latest
+            target: x86_64-apple-darwin
+            artifact_name: target/x86_64-apple-darwin/release/espgui
+            release_name: x86_64-apple-darwin
+            cross: false
+            strip: true
+
+          - os: windows-latest
+            target: x86_64-pc-windows-msvc
+            artifact_name: target/x86_64-pc-windows-msvc/release/espgui.exe
+            release_name: x86_64-pc-windows-msvc.exe
+            cross: false
+            strip: true
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup Rust toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          target: ${{ matrix.target }}
+
+      - name: Install egui deps (linux)
+        if: matrix.os == 'ubuntu-latest'
+        run: sudo apt-get install -y libxcb-render0-dev libxcb-shape0-dev libxcb-xfixes0-dev libspeechd-dev libxkbcommon-dev libssl-dev
+
+      - name: Build
+        uses: actions-rs/cargo@v1
+        with:
+          command: build
+          args: --release --locked --target=${{ matrix.target }}
+          use-cross: ${{ matrix.cross }}
+          strip: ${{ matrix.strip }}
+
+      - name: Release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: ${{ matrix.artifact_name }}
+          tag: ${{ github.ref }}
+          asset_name: espgui-$tag-${{ matrix.release_name }}

@@ -14,7 +14,7 @@ pub mod chip {
             match self {
                 Chip::ESP32 => "esp32",
                 Chip::ESP8266 => "esp8266",
-                Chip::ESP32C3 => "esp32c3"
+                Chip::ESP32C3 => "esp32c3",
             }
         }
 
@@ -30,7 +30,7 @@ pub mod serial {
 
     use clap::ArgEnum;
 
-// todo: add support for windows/mac/linux ports
+    // todo: add support for windows/mac/linux ports
 
     #[derive(ArgEnum, Clone, Debug)]
     pub enum Serial {

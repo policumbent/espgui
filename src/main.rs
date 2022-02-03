@@ -1,7 +1,7 @@
 use std::ffi::OsString;
 
 use clap::Parser;
-use espmonitor::{AppArgs, Framework, run};
+use espmonitor::{run, AppArgs, Framework};
 use klask::Settings;
 
 use crate::types::chip::Chip;
@@ -39,7 +39,7 @@ impl Args {
             chip: self.chip.to_esp_chip(),
             framework: Framework::default(),
             reset: !self.disable_reset,
-            serial:self.serial.to_string(),
+            serial: self.serial.to_string(),
             speed: Some(self.speed),
         }
     }
@@ -55,7 +55,7 @@ fn main() {
         // match run(app_args){
         //     Ok(_) => (),
         //     Err(err) => {
-        //         println!("Error: {}", err);
+        //         println!("Error: {err}");
         //     }
         // }
     });

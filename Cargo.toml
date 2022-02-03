@@ -1,10 +1,27 @@
 [package]
-name = "espmonitor-gui"
+name = "espgui"
 version = "0.1.0"
 edition = "2021"
 description = "A minimal gui for espmonitor"
 authors = ["Gabriele Belluardo <gabriele.belluardo@outlook.it>"]
+homepage = "https://github.com/gabelluardo/espgui"
+repository = "https://github.com/gabelluardo/espgui"
+documentation = "https://github.com/gabelluardo/espgui/blob/main/README.md"
+readme = "README.md"
 license = "GPL-3.0+"
+
+exclude = [".*", "*.md", "LICENSE"]
+
+[profile.release]
+lto = true
+opt-level = "z"
+codegen-units = 1
+panic = "abort"
+
+[package.metadata.release]
+tag-name = "v{{version}}"
+tag-message = "v{{version}}"
+pre-release-commit-message = "Bump version to {{version}}"
 
 [dependencies]
 clap = { version = "3.0", features = ["derive"] }
