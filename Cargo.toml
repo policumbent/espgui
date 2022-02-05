@@ -19,6 +19,7 @@ codegen-units = 1
 panic = "abort"
 
 [package.metadata.release]
+publish = false
 tag-name = "v{{version}}"
 tag-message = "v{{version}}"
 pre-release-commit-message = "Bump version to {{version}}"

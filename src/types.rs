@@ -49,7 +49,7 @@ pub mod serial {
 
     impl Serial {
         pub fn to_string(&self) -> String {
-            unimplemented!()
+            todo!()
         }
     }
 }
