@@ -12,7 +12,7 @@ mod types;
 #[derive(Parser, Debug)]
 struct Args {
     /// Path to the serial device
-    #[clap(long, arg_enum, required = true)]
+    #[clap(long, arg_enum, required = true, ignore_case = true)]
     pub serial: Serial,
 
     /// Which ESP chip to target
@@ -33,9 +33,9 @@ struct Args {
 }
 
 impl Args {
-    fn get_app_args(self) -> AppArgs {
+    fn get_app_args(&self) -> AppArgs {
         AppArgs {
-            bin: self.bin,
+            bin: self.bin.to_owned(),
             chip: self.chip.to_esp_chip(),
             framework: Framework::default(),
             reset: !self.disable_reset,
@@ -47,16 +47,14 @@ impl Args {
 
 fn main() {
     klask::run_derived::<Args, _>(Settings::default(), |args| {
-        dbg!(&args);
-
+        // dbg!(&args);
+        //
         // let em_args = args.get_app_args();
         // dbg!(&em_args);
 
-        // match run(app_args){
-        //     Ok(_) => (),
-        //     Err(err) => {
-        //         println!("Error: {err}");
-        //     }
-        // }
+        match run(args.get_app_args()) {
+            Ok(_) => (),
+            Err(err) => eprintln!("[Error] {err}"),
+        }
     });
 }

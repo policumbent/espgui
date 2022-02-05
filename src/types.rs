@@ -25,31 +25,60 @@ pub mod chip {
 }
 
 pub mod serial {
-    use std::str::FromStr;
-    use std::string::ParseError;
-
     use clap::ArgEnum;
 
-    // todo: add support for windows/mac/linux ports
-
+    #[cfg(windows)]
     #[derive(ArgEnum, Clone, Debug)]
+    #[clap(rename_all = "verbatim")]
     pub enum Serial {
-        Port1,
-        Port2,
-        Port3,
+        COM0,
+        COM1,
+        COM2,
+        COM3,
     }
 
-    impl FromStr for Serial {
-        type Err = ParseError;
-
-        fn from_str(_s: &str) -> Result<Self, Self::Err> {
-            todo!()
-        }
+    #[cfg(unix)]
+    #[derive(ArgEnum, Clone, Debug)]
+    #[clap(rename_all = "verbatim")]
+    #[allow(non_camel_case_types)]
+    pub enum Serial {
+        ttyUSB0,
+        ttyUSB1,
+        ttyUSB2,
+        ttyUSB3,
     }
+
+    // todo: macos ports
+    #[cfg(macos)]
+    #[derive(ArgEnum, Clone, Debug)]
+    #[clap(rename_all = "verbatim")]
+    pub enum Serial {}
 
     impl Serial {
+        fn as_str(&self) -> &'static str {
+            #[cfg(windows)]
+            match self {
+                Serial::COM0 => "COM0",
+                Serial::COM1 => "COM1",
+                Serial::COM2 => "COM2",
+                Serial::COM3 => "COM3",
+            }
+
+            #[cfg(unix)]
+            match self {
+                Serial::ttyUSB0 => "/dev/ttyUSB0",
+                Serial::ttyUSB1 => "/dev/ttyUSB1",
+                Serial::ttyUSB2 => "/dev/ttyUSB2",
+                Serial::ttyUSB3 => "/dev/ttyUSB3",
+            }
+
+            // todo: macos ports
+            #[cfg(macos)]
+            match self {}
+        }
+
         pub fn to_string(&self) -> String {
-            todo!()
+            self.as_str().to_string()
         }
     }
 }
