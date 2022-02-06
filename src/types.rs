@@ -25,9 +25,11 @@ pub mod chip {
 }
 
 pub mod serial {
+    use std::fmt;
+
     use clap::ArgEnum;
 
-    #[cfg(windows)]
+    #[cfg(target_os = "windows")]
     #[derive(ArgEnum, Clone, Debug)]
     #[clap(rename_all = "verbatim")]
     pub enum Serial {
@@ -37,7 +39,7 @@ pub mod serial {
         COM3,
     }
 
-    #[cfg(unix)]
+    #[cfg(target_os = "linux")]
     #[derive(ArgEnum, Clone, Debug)]
     #[clap(rename_all = "verbatim")]
     #[allow(non_camel_case_types)]
@@ -49,14 +51,14 @@ pub mod serial {
     }
 
     // todo: macos ports
-    #[cfg(macos)]
+    #[cfg(target_os = "macos")]
     #[derive(ArgEnum, Clone, Debug)]
     #[clap(rename_all = "verbatim")]
     pub enum Serial {}
 
     impl Serial {
         fn as_str(&self) -> &'static str {
-            #[cfg(windows)]
+            #[cfg(target_os = "windows")]
             match self {
                 Serial::COM0 => "COM0",
                 Serial::COM1 => "COM1",
@@ -64,7 +66,7 @@ pub mod serial {
                 Serial::COM3 => "COM3",
             }
 
-            #[cfg(unix)]
+            #[cfg(target_os = "linux")]
             match self {
                 Serial::ttyUSB0 => "/dev/ttyUSB0",
                 Serial::ttyUSB1 => "/dev/ttyUSB1",
@@ -73,12 +75,14 @@ pub mod serial {
             }
 
             // todo: macos ports
-            #[cfg(macos)]
+            #[cfg(target_os = "macos")]
             match self {}
         }
+    }
 
-        pub fn to_string(&self) -> String {
-            self.as_str().to_string()
+    impl fmt::Display for Serial {
+        fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+            write!(f, "{}", self.as_str())
         }
     }
 }
