@@ -74,9 +74,8 @@ pub mod serial {
                 Serial::ttyUSB3 => "/dev/ttyUSB3",
             }
 
-            // todo: macos ports
             #[cfg(target_os = "macos")]
-            match self {}
+            todo!("macos ports")
         }
     }
 
