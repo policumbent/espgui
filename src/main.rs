@@ -54,7 +54,7 @@ fn main() {
 
         match run(args.get_app_args()) {
             Ok(_) => (),
-            Err(err) => eprintln!("[Error] {err}"),
+            Err(err) => eprintln!("\x1b[1;31m{err}\x1b[0m"),
         }
     });
 }
