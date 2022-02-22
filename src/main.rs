@@ -46,15 +46,8 @@ impl Args {
 }
 
 fn main() {
-    klask::run_derived::<Args, _>(Settings::default(), |args| {
-        // dbg!(&args);
-        //
-        // let em_args = args.get_app_args();
-        // dbg!(&em_args);
-
-        match run(args.get_app_args()) {
-            Ok(_) => (),
-            Err(err) => eprintln!("\x1b[1;31m{err}\x1b[0m"),
-        }
+    klask::run_derived::<Args, _>(Settings::default(), |args| match run(args.get_app_args()) {
+        Ok(_) => (),
+        Err(err) => eprintln!("\x1b[1;31m{err}\x1b[0m"),
     });
 }
