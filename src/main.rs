@@ -1,3 +1,4 @@
+use std::borrow::Cow;
 use std::ffi::OsString;
 
 use clap::Parser;
@@ -46,7 +47,10 @@ impl Args {
 }
 
 fn main() {
-    klask::run_derived::<Args, _>(Settings::default(), |args| match run(args.get_app_args()) {
+    let mut settings = Settings::default();
+    settings.custom_font = Some(Cow::Borrowed(include_bytes!(r"font/Hack-Regular.ttf")));
+
+    klask::run_derived::<Args, _>(settings, |args| match run(args.get_app_args()) {
         Ok(_) => (),
         Err(err) => eprintln!("\x1b[1;31m{err}\x1b[0m"),
     });

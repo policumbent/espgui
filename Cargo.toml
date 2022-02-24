@@ -17,6 +17,7 @@ lto = true
 opt-level = "z"
 codegen-units = 1
 panic = "abort"
+strip = true
 
 [package.metadata.release]
 publish = false

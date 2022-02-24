@@ -10,7 +10,7 @@ pub mod chip {
     }
 
     impl Chip {
-        fn as_str(&self) -> &str {
+        fn as_str(&self) -> &'static str {
             match self {
                 Chip::ESP32 => "esp32",
                 Chip::ESP8266 => "esp8266",
