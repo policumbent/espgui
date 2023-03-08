@@ -27,5 +27,5 @@ pre-release-commit-message = "Bump version to {{version}}"
 
 [dependencies]
 clap = { version = "^3.0", features = ["derive"] }
-espmonitor = "0.6.2"
+espmonitor = "0.7.0"
 klask = { git = "https://github.com/gabelluardo/klask" }
